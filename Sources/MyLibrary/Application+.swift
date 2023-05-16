@@ -9,15 +9,16 @@ import Foundation
 import UIKit
 
 extension MyLibrary {
-    //UIApplication+
+    ///UIApplication+
     public struct Application {
-        //回傳是否有安裝chrome
+        
+        ///回傳是否有安裝chrome
         static func isChromeInstalled() -> Bool {
             guard let chromeURL = URL(string: "googlechromes://www.tmrt.com.tw") else { return false }
             return UIApplication.shared.canOpenURL(chromeURL)
         }
         
-        //打開瀏覽器，有chrome則使用，無則使用safari
+        ///打開瀏覽器，有chrome則使用，無則使用safari
         static func openUrl(urlStr: String) {
             var url = URL(string: urlStr)
             if isChromeInstalled() {

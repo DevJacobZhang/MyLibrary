@@ -1,6 +1,18 @@
 import Foundation
 import UIKit
 
+extension UIView {
+    ///設置圓角
+    public func addRoundedCorners(corners: UIRectCorner, radius: CGFloat) {
+        let path = UIBezierPath(roundedRect: self.bounds,
+                                byRoundingCorners: corners,
+                                cornerRadii: CGSize(width: radius, height: radius))
+        let maskLayer = CAShapeLayer()
+        maskLayer.path = path.cgPath
+        self.layer.mask = maskLayer
+    }
+}
+
 public struct MyLibrary {
     
     ///將第一個字元改成大寫，其餘後面全部小寫
@@ -9,14 +21,14 @@ public struct MyLibrary {
     }
     
     ///設置圓角
-    static public func addRoundedCorners(view: UIView, corners: UIRectCorner, radius: CGFloat) {
-        let path = UIBezierPath(roundedRect: view.bounds,
-                                byRoundingCorners: corners,
-                                cornerRadii: CGSize(width: radius, height: radius))
-        let maskLayer = CAShapeLayer()
-        maskLayer.path = path.cgPath
-        view.layer.mask = maskLayer
-    }
+//    static public func addRoundedCorners(view: UIView, corners: UIRectCorner, radius: CGFloat) {
+//        let path = UIBezierPath(roundedRect: view.bounds,
+//                                byRoundingCorners: corners,
+//                                cornerRadii: CGSize(width: radius, height: radius))
+//        let maskLayer = CAShapeLayer()
+//        maskLayer.path = path.cgPath
+//        view.layer.mask = maskLayer
+//    }
     
     ///回傳這筆字串在UILabel裡需要多少高
     static public func calculateLabelHeight(text: String, font: UIFont, width: CGFloat) -> CGFloat {
