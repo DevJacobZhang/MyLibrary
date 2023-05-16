@@ -13,6 +13,12 @@ extension UIView {
     }
 }
 
+extension UILabel {
+    public func testWord() {
+        
+    }
+}
+
 public struct MyLibrary {
     
     ///將第一個字元改成大寫，其餘後面全部小寫
