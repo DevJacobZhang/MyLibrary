@@ -3,10 +3,6 @@ import UIKit
 
 public struct MyLibrary {
     
-    public init() {
-        
-    }
-    
     ///將第一個字元改成大寫，其餘後面全部小寫
     static public func capitalizeFirstLetter(string: String) -> String {
         return string.prefix(1).uppercased() + string.lowercased().dropFirst()
