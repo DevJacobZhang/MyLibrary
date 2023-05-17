@@ -8,15 +8,17 @@
 import Foundation
 import UIKit
 
-extension UIView {
-    ///設置圓角
-    public func CRAddRoundedCorners(corners: UIRectCorner, radius: CGFloat) {
-        let path = UIBezierPath(roundedRect: self.bounds,
-                                byRoundingCorners: corners,
-                                cornerRadii: CGSize(width: radius, height: radius))
-        let maskLayer = CAShapeLayer()
-        maskLayer.path = path.cgPath
-        self.layer.mask = maskLayer
+extension MyLibrary {
+    public class CRView {
+        ///設置圓角
+        static public func CRAddRoundedCorners(view: UIView, corners: UIRectCorner, radius: CGFloat) {
+            let path = UIBezierPath(roundedRect: view.bounds,
+                                    byRoundingCorners: corners,
+                                    cornerRadii: CGSize(width: radius, height: radius))
+            let maskLayer = CAShapeLayer()
+            maskLayer.path = path.cgPath
+            view.layer.mask = maskLayer
+        }
     }
 }
 
