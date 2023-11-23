@@ -18,7 +18,7 @@ extension UITapGestureRecognizer {
         let linkText = attributedText.attributedSubstring(from: targetRange)
         var urlComponents = URLComponents()
         
-        // 將連結文字轉換為 URL
+        // 將連結文字轉換為 Url(電話)
         urlComponents.scheme = "tel"
         urlComponents.path = linkText.string
         return urlComponents.url

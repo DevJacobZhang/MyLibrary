@@ -11,7 +11,7 @@ import UIKit
 extension MyLibrary {
     public struct CRString {
         ///將第一個字元改成大寫，其餘後面全部小寫
-        static func CRCapitalizeFirstLetter(string: String) -> String {
+        internal static func CRCapitalizeFirstLetter(string: String) -> String {
             return string.prefix(1).uppercased() + string.lowercased().dropFirst()
         }
         
@@ -24,5 +24,54 @@ extension MyLibrary {
             label.sizeToFit()
             return label.frame.height
         }
+        
+        ///將整組字串裡的電話號碼轉成超連結，使用Attribute字串做超連結時，記得用textView做，telTextView.attributedText = ....
+        static func getTelAttributedString(text: String) -> NSMutableAttributedString {
+            let attributedString = NSMutableAttributedString(string:text)
+                    
+            let patterns = [
+                "\\d{10}",                          // 0800123456, //0425212345, //0980123456
+                "\\d{2}-\\d{7,8}",                  //  02-25212345
+                "\\(\\d{2}\\)\\d{7,8}",             // (02)25212345
+                "\\(\\d{2}\\)-\\d{7,8}",            // (02)-25212345
+                "\\(\\d{2}\\)\\d{3}-\\d{5}",        // (02)252-12345
+                "\\(\\d{2}\\)\\d{4}-\\d{4}",        // (02)2521-2345
+                "\\(\\d{2}\\)-\\d{4}-\\d{4}",       // (02)-2521-2345
+                "\\d{2}-\\d{4}-\\d{4}",             //  02-2521-2345
+                "\\(\\d{2}\\) \\d{8}",              // (02) 25212345
+                "\\(\\d{2}\\)\\d{3}-\\d{3}-\\d{2}", // (02)252-123-45
+                "\\d{4}-\\d{6}",                    //  0800-123456, 0980-123456
+                "\\d{4}-\\d{3}-\\d{3}",             //  0800-123-456, 0980-123-456
+                "\\(\\d{4}\\)\\d{6}",               // (0800)123456
+                "\\(\\d{4}\\)-\\d{6}",              // (0800)-123465
+                "\\(\\d{4}\\)-\\d{3}-\\d{3}",       // (0800)-123-456
+                
+            ]
+            
+            //將pattern轉換成一組字串並用"|"做間隔
+            var phoneNumberPatterns = ""
+            for (i,pattern) in patterns.enumerated() {
+                phoneNumberPatterns += "\(pattern)\( i == patterns.count - 1 ? "" : "|")"
+            }
+            
+            if let phoneNumberRegex = try? NSRegularExpression(pattern: phoneNumberPatterns, options: []) {
+                //在規則內找出整筆字串長度中符合規得的字串
+                let matches = phoneNumberRegex.matches(in: text, options: [], range: NSRange(location: 0, length: text.utf16.count))
+                //將每個找到的符合規則的字串前面加上tel:// 並加回到原字串裡的相同位置
+                for match in matches.reversed() {
+                    let phoneNumber = (text as NSString).substring(with: match.range)
+                    let range = Range(match.range, in: text)!
+                    let phoneNumberLink = "tel://" + phoneNumber
+                    //將此筆電話字串加入連結功能
+                    attributedString.addAttribute(.link, value: phoneNumberLink, range: NSRange(range, in: text))
+                    let font = UIFont.systemFont(ofSize: 16)
+                    //將此筆電話字串加入特定大小
+                    attributedString.addAttribute(.font, value: font.withSize(16), range: NSRange(location: 0, length: attributedString.length))
+                }
+            }
+            return attributedString
+        }
     }
+    
+    
 }
