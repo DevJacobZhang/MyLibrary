@@ -8,6 +8,13 @@
 import Foundation
 import UIKit
 
+enum RegexType {
+    case Phone
+    case Email
+    case Password
+    case Name
+}
+
 extension MyLibrary {
     public struct CRString {
         ///將第一個字元改成大寫，其餘後面全部小寫
@@ -71,7 +78,27 @@ extension MyLibrary {
             }
             return attributedString
         }
+        
+        ///依照指定形式檢查字串是否通過驗證
+        func checkRegex(str: String, type: RegexType) -> Bool {
+            var pattern = ""
+            
+            switch type {
+            case .Phone:
+                pattern = "^[0-9]{10}$"
+            case .Email:
+                pattern = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+            case .Password:
+                pattern = "^[A-Z0-9a-z]{6,}$"
+            case .Name:
+                pattern = "^[\\u4e00-\\u9fffa-zA-Z0-9]{1,10}$"
+            }
+            
+            let regex = try! NSRegularExpression(pattern: pattern)
+            let range = NSRange(location: 0, length: str.utf16.count)
+            let isMatch = regex.firstMatch(in: str, range: range) != nil
+            
+            return isMatch
+        }
     }
-    
-    
 }
