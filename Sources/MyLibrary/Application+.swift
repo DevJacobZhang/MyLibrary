@@ -10,7 +10,7 @@ import UIKit
 
 extension MyLibrary {
     ///UIApplication+
-    public struct Application {
+    public class Application {
         
         ///回傳是否有安裝chrome
         static func isChromeInstalled() -> Bool {
