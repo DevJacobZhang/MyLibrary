@@ -52,13 +52,19 @@ class AlertQueue {
         if !isAlertShowing && !alertQueue.isEmpty {
             let alert = alertQueue.removeFirst()
             isAlertShowing = true
-            
-            if let rootViewController = UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.rootViewController {
-                rootViewController.present(alert, animated: true) {
-                    // Alert顯示完成後調用的completion block，非點擊確認鈕後執行！
-                    
-                }
-            }
+
+            let topViewController = UIViewController.topMostViewController()
+            topViewController.present(alert, animated: true)
         }
+    }
+}
+
+extension UIViewController {
+    class func topMostViewController() -> UIViewController {
+        var topViewController: UIViewController = UIApplication.shared.windows.filter({$0.isKeyWindow}).first!.rootViewController!
+        while let presentedViewController = topViewController.presentedViewController {
+            topViewController = presentedViewController
+        }
+        return topViewController
     }
 }
